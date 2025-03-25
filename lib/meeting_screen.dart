@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'calendar_page.dart';
+import 'graph_page.dart';
 
 class MeetingScreen extends StatelessWidget {
   const MeetingScreen({super.key});
@@ -7,22 +9,38 @@ class MeetingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
-        children: [_buildSideBar(), _buildMenuArea(), _buildMainContent()],
+        children: [
+          _buildSideBar(context),
+          _buildMenuArea(),
+          _buildMainContent(),
+        ],
       ),
     );
   }
 
   // 좌측 사이드바
-  Widget _buildSideBar() {
+  Widget _buildSideBar(BuildContext context) {
     return Container(
       width: 200,
       color: Colors.grey[200],
       child: Column(
         children: [
           const SizedBox(height: 40),
-          _sideBarIcon(Icons.home, () => print('홈 클릭')),
-          _sideBarIcon(Icons.search, () => print('검색 클릭')),
-          _sideBarIcon(Icons.bar_chart, () => print('차트 클릭')),
+          _sideBarIcon(
+            Icons.calendar_today,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CalendarPage()),
+            ),
+          ),
+          _sideBarIcon(
+            Icons.show_chart,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const GraphPage()),
+            ),
+          ),
+          _sideBarIcon(Icons.search_rounded, () => print('차트 클릭')),
           _sideBarIcon(Icons.history, () => print('히스토리 클릭')),
         ],
       ),
@@ -33,7 +51,7 @@ class MeetingScreen extends StatelessWidget {
     return IconButton(icon: Icon(icon), onPressed: onPressed);
   }
 
-  // 중간 메뉴 영역 (스크롤 가능)
+  // 중간 메뉴 영역
   Widget _buildMenuArea() {
     return Container(
       width: 250,
@@ -130,7 +148,7 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  // 하단 버튼과 AI 요약 영역 (적응형 처리)
+  // 하단 버튼과 AI 요약 영역
   Widget _buildBottomArea() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -161,7 +179,7 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  // 하단 버튼 그룹 (가로 스크롤 가능)
+  // 하단 버튼 그룹
   Widget _bottomActionButtons() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
