@@ -7,16 +7,12 @@ class MeetingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
-        children: [
-          _buildSideBar(), // 좌측 사이드바
-          _buildMenuArea(), // 중간 메뉴 영역
-          _buildMainContent(), // 메인 콘텐츠 영역
-        ],
+        children: [_buildSideBar(), _buildMenuArea(), _buildMainContent()],
       ),
     );
   }
 
-  // 좌측 사이드바 위젯
+  // 좌측 사이드바
   Widget _buildSideBar() {
     return Container(
       width: 200,
@@ -24,21 +20,20 @@ class MeetingScreen extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 40),
-          _sideBarIcon(Icons.home),
-          _sideBarIcon(Icons.search),
-          _sideBarIcon(Icons.bar_chart),
-          _sideBarIcon(Icons.history),
+          _sideBarIcon(Icons.home, () => print('홈 클릭')),
+          _sideBarIcon(Icons.search, () => print('검색 클릭')),
+          _sideBarIcon(Icons.bar_chart, () => print('차트 클릭')),
+          _sideBarIcon(Icons.history, () => print('히스토리 클릭')),
         ],
       ),
     );
   }
 
-  // 사이드바의 아이콘 버튼 위젯
-  Widget _sideBarIcon(IconData icon) {
-    return IconButton(icon: Icon(icon), onPressed: () {});
+  Widget _sideBarIcon(IconData icon, VoidCallback onPressed) {
+    return IconButton(icon: Icon(icon), onPressed: onPressed);
   }
 
-  // 중간 메뉴 영역 위젯
+  // 중간 메뉴 영역 (스크롤 가능)
   Widget _buildMenuArea() {
     return Container(
       width: 250,
@@ -46,52 +41,52 @@ class MeetingScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         border: Border(right: BorderSide(color: Colors.black12)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _menuButton('폴더 작성'),
-          _menuButton('인공지능 조사'),
-          _menuButton('엑셀파일 조사'),
-          _menuButton('폴더내 조사'),
-          const Divider(),
-          const Text(
-            '회의록',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          _menuListItem('1주'),
-          _menuListItem('2주'),
-          _menuListItem('3주'),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _menuButton('폴더 작성'),
+            _menuButton('인공지능 조사'),
+            _menuButton('엑셀파일 조사'),
+            _menuButton('폴더내 조사'),
+            const Divider(),
+            const Text(
+              '회의록',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            _menuListItem('1주'),
+            _menuListItem('2주'),
+            _menuListItem('3주'),
+          ],
+        ),
       ),
     );
   }
 
-  // 메뉴 버튼 위젯
   Widget _menuButton(String title) {
     return ElevatedButton(onPressed: () {}, child: Text(title));
   }
 
-  // 메뉴 목록 아이템 위젯
   Widget _menuListItem(String title) {
     return ListTile(title: Text(title));
   }
 
-  // 메인 콘텐츠 위젯
+  // 메인 콘텐츠
   Widget _buildMainContent() {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTopTabBar(), // 상단 탭바
-          _buildMeetingInfo(), // 회의록 정보 (1주, 날짜, 설명)
+          _buildTopTabBar(),
+          _buildMeetingInfo(),
           const Spacer(),
-          _buildBottomArea(), // 하단 버튼 및 AI 요약 영역
+          _buildBottomArea(),
         ],
       ),
     );
   }
 
-  // 상단 탭바 위젯
+  // 상단 탭바
   Widget _buildTopTabBar() {
     return Container(
       height: 50,
@@ -115,7 +110,7 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  // 회의 정보 표시 위젯
+  // 회의 정보
   Widget _buildMeetingInfo() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -135,7 +130,7 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  // 하단 버튼 및 AI 요약 영역 위젯
+  // 하단 버튼과 AI 요약 영역 (적응형 처리)
   Widget _buildBottomArea() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -143,6 +138,7 @@ class MeetingScreen extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.grey.shade400)),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _bottomActionButtons(),
@@ -165,20 +161,22 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  // 하단 액션 버튼 그룹 위젯
+  // 하단 버튼 그룹 (가로 스크롤 가능)
   Widget _bottomActionButtons() {
-    return Row(
-      children: [
-        _bottomButton('내용 요약'),
-        const SizedBox(width: 10),
-        _bottomButton('태그 추출'),
-        const SizedBox(width: 10),
-        _bottomButton('검색'),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _bottomButton('내용 요약'),
+          const SizedBox(width: 10),
+          _bottomButton('태그 추출'),
+          const SizedBox(width: 10),
+          _bottomButton('검색'),
+        ],
+      ),
     );
   }
 
-  // 개별 하단 액션 버튼 위젯
   Widget _bottomButton(String title) {
     return ElevatedButton(onPressed: () {}, child: Text(title));
   }
