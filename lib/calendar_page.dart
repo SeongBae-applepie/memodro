@@ -53,15 +53,6 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           Row(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _calendarFormat = CalendarFormat.twoWeeks;
-                  });
-                },
-                child: const Text('2 Weeks'),
-              ),
-              const SizedBox(width: 8),
               ElevatedButton(onPressed: _goToToday, child: const Text('Today')),
             ],
           ),
