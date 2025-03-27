@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: MeetingScreen(),
+      home: MeetingScreen(), // 앱 실행 시 가장 먼저 표시할 화면
       debugShowCheckedModeBanner: false,
     );
   }
