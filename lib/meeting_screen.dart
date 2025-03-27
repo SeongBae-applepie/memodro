@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'left_sidebar_layout.dart';
+import 'bottom_section.dart';
 
 class MeetingScreen extends StatelessWidget {
   const MeetingScreen({super.key});
@@ -7,10 +8,11 @@ class MeetingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LeftSidebarLayout(
+      activePage: PageType.home,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 상단 영역 (예: 제목 등)
+          // 상단 헤더 영역
           Container(
             height: 50,
             color: Colors.grey[300],
@@ -21,8 +23,7 @@ class MeetingScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
-
-          // 메인 콘텐츠
+          // 메인 콘텐츠 영역
           Expanded(
             child: Center(
               child: Text(
@@ -31,6 +32,8 @@ class MeetingScreen extends StatelessWidget {
               ),
             ),
           ),
+          // 하단 액션 영역 (CollapsibleBottomSection)
+          const CollapsibleBottomSection(),
         ],
       ),
     );

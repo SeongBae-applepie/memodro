@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'left_sidebar_layout.dart';
+import 'bottom_section.dart';
 
 class GraphPage extends StatelessWidget {
   const GraphPage({super.key});
@@ -7,11 +8,12 @@ class GraphPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LeftSidebarLayout(
+      activePage: PageType.graph,
       child: Column(
         children: [
           _buildTopBar(),
           Expanded(child: _buildGraphArea()),
-          _buildBottomArea(),
+          const CollapsibleBottomSection(),
         ],
       ),
     );
@@ -33,26 +35,8 @@ class GraphPage extends StatelessWidget {
   Widget _buildGraphArea() {
     return Center(
       child: Text(
-        '그래프 내용 표시 (CustomPainter, 라이브러리 등 활용 가능)',
+        '그래프 내용 표시 (예: CustomPainter 또는 라이브러리 활용)',
         style: const TextStyle(fontSize: 16),
-      ),
-    );
-  }
-
-  Widget _buildBottomArea() {
-    return Container(
-      height: 60,
-      color: Colors.grey[200],
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(onPressed: () {}, child: const Text('내용 요약')),
-          const SizedBox(width: 10),
-          ElevatedButton(onPressed: () {}, child: const Text('태그 추출')),
-          const SizedBox(width: 10),
-          ElevatedButton(onPressed: () {}, child: const Text('검색')),
-        ],
       ),
     );
   }

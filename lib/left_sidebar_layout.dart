@@ -3,25 +3,28 @@ import 'meeting_screen.dart';
 import 'calendar_page.dart';
 import 'graph_page.dart';
 
-/// 좌측 사이드바만 공통으로 두고, 나머지는 각 페이지(child)가 담당하는 레이아웃
-class LeftSidebarLayout extends StatelessWidget {
-  final Widget child; // 각 페이지에서 전달받을 메인 콘텐츠
+/// 현재 활성 페이지를 나타내는 열거형
+enum PageType { home, calendar, graph }
 
-  const LeftSidebarLayout({super.key, required this.child});
+/// 좌측 사이드바만 공통으로 두고, 나머지 영역은 각 페이지(child)가 담당하는 레이아웃
+class LeftSidebarLayout extends StatelessWidget {
+  final Widget child; // 각 페이지의 메인 콘텐츠
+  final PageType activePage; // 현재 활성화된 페이지
+
+  const LeftSidebarLayout({
+    super.key,
+    required this.child,
+    required this.activePage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          _buildSideBar(context), // 좌측 사이드바
-          Expanded(child: child), // 우측(메인 콘텐츠) -> 각 페이지마다 다름
-        ],
-      ),
+      body: Row(children: [_buildSideBar(context), Expanded(child: child)]),
     );
   }
 
-  // 좌측 사이드바
+  // 좌측 사이드바 (아이콘을 통해 페이지 전환, 현재 활성 페이지의 아이콘는 표시하지 않음)
   Widget _buildSideBar(BuildContext context) {
     return Container(
       width: 60,
@@ -29,31 +32,30 @@ class LeftSidebarLayout extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 40),
-          // 홈(메인 화면) 이동
-          _sideBarIcon(
-            Icons.home,
-            () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const MeetingScreen()),
+          if (activePage != PageType.home)
+            _sideBarIcon(
+              Icons.home,
+              () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const MeetingScreen()),
+              ),
             ),
-          ),
-          // 달력 페이지 이동
-          _sideBarIcon(
-            Icons.calendar_today,
-            () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const CalendarPage()),
+          if (activePage != PageType.calendar)
+            _sideBarIcon(
+              Icons.calendar_today,
+              () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const CalendarPage()),
+              ),
             ),
-          ),
-          // 그래프 페이지 이동
-          _sideBarIcon(
-            Icons.show_chart,
-            () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const GraphPage()),
+          if (activePage != PageType.graph)
+            _sideBarIcon(
+              Icons.show_chart,
+              () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const GraphPage()),
+              ),
             ),
-          ),
-          // 예시로 추가 아이콘들
           _sideBarIcon(Icons.search_rounded, () => print('검색')),
           _sideBarIcon(Icons.history, () => print('히스토리')),
         ],
@@ -61,7 +63,7 @@ class LeftSidebarLayout extends StatelessWidget {
     );
   }
 
-  // 사이드바 아이콘 버튼
+  // 개별 아이콘 버튼
   Widget _sideBarIcon(IconData icon, VoidCallback onPressed) {
     return IconButton(icon: Icon(icon), onPressed: onPressed);
   }
